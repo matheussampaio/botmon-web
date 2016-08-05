@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BOTMON - O SEU BOT DE POKÉMON</title>
+</head>
+<body>
+
+<button id="createBot">CRIAR BOT</button>
+
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script>
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyAvjGhE7SdL1jQ4pHmu1CEmo1jck7Thams",
+    authDomain: "meowth-aed86.firebaseapp.com",
+    databaseURL: "https://meowth-aed86.firebaseio.com",
+    storageBucket: "meowth-aed86.appspot.com",
+};
+
+firebase.initializeApp(config);
+
+document.getElementById('createBot').onclick = createBotHandler;
+
+function createBotHandler(e) {
+    console.log('createBotHandler');
+
+    var newBotKey = firebase.database().ref('bots').push().key;
+    console.log(newBotKey);
+
+    firebase.database().ref('bots/' + newBotKey).set({
+        next: 'create',
+        status: null,
+        user: 'user@user.com'
+    })
+    .then((a, b) => {
+        console.log('then');
+        console.log(a, b);
+    })
+    .catch((err) => {
+        console.log('catch');
+        console.log(a, b);
+    });
+}
+</script>
+
+</body>
+</html>

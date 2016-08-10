@@ -1,0 +1,72 @@
+<div layout="row" layout-align="center" layout-margin layout-padding>
+  <md-card class="animated fadeIn" flex="100" flex-gt-xs="50">
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Register</span>
+      </md-card-title-text>
+    </md-card-title>
+
+    <form name="register">
+      <md-card-content>
+        <div layout="column">
+          <div layout="row" layout-align="center" ng-if="$ctrl.error.show">
+            <span class="fmsc-error md-caption" layout-padding>
+              {{ $ctrl.error.message[$ctrl.error.show] }}
+            </span>
+          </div>
+          <div layout="row">
+            <md-input-container flex='auto'>
+              <label>Name</label>
+              <input type="text" name="name" ng-model="$ctrl.data.name" ng-disabled="$ctrl.loading"  minlength="4" md-maxlength="30" required>
+              <div ng-messages="register.name.$error">
+                <div ng-message="required">This is required!</div>
+                <div ng-message="md-maxlength">That's too long!</div>
+                <div ng-message="minlength">That's too short!</div>
+              </div>
+            </md-input-container>
+          </div>
+
+          <div layout="row">
+            <md-input-container flex='auto'>
+              <label>Email</label>
+              <input name="email" type="email" ng-model="$ctrl.data.email" ng-disabled="$ctrl.loading"  required>
+              <div ng-messages="register.email.$error" role="alert">
+                <div ng-message="required">This is required!</div>
+              </div>
+            </md-input-container>
+            <md-input-container flex='auto'>
+              <label>Confirm Email</label>
+              <input name="confirmEmail" type="email" ng-model="$ctrl.data.confirmEmail" ng-disabled="$ctrl.loading" required>
+              <div ng-messages="register.confirmEmail.$error" role="alert">
+                <div ng-message="required">This is required!</div>
+              </div>
+            </md-input-container>
+          </div>
+
+          <div layout="row">
+            <md-input-container flex='auto'>
+              <label>Password</label>
+              <input name="password" type="password" ng-model="$ctrl.data.password" ng-disabled="$ctrl.loading" required>
+              <div ng-messages="register.password.$error" role="alert">
+                <div ng-message="required">This is required!</div>
+              </div>
+            </md-input-container>
+            <md-input-container flex='auto'>
+              <label>Confirm Password</label>
+              <input name="confirmPassword" type="password" ng-model="$ctrl.data.confirmPassword" ng-disabled="$ctrl.loading" required>
+              <div ng-messages="register.confirmPassword.$error" role="alert">
+                <div ng-message="required">This is required!</div>
+              </div>
+            </md-input-container>
+          </div>
+        </div>
+      </md-card-content>
+
+      <md-card-actions layout="row" layout-align="end center">
+        <md-button type='submit' class="md-primary" ng-click="$ctrl.register()" ng-disabled="register.$invalid || $ctrl.loading">
+          Register
+        </md-button>
+      </md-card-actions>
+    </form>
+  </md-card>
+</div>

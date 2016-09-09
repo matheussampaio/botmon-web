@@ -1,64 +1,63 @@
 (function () {
 
-  angular
-    .module('fmsc')
-    .component('register', {
-      controller: registerController,
-      templateUrl: 'register/register.html'
-    });
+  class RegisterController {
+    /* @ngInject */
+    constructor($state, AuthService, LoadingService) {
+      this.$state = $state;
 
-  function registerController($state, $log, AuthService, LoadingService) {
-    const vm = this;
+      this.AuthService = AuthService;
+      this.LoadingService = LoadingService;
 
-    vm.loading = false;
-    vm.data = {
-      email: null,
-      confirmEmail: null,
-      password: null,
-      confirmPassword: null
-    };
-    vm.error = {
-      show: null,
-      message: {
-        EMAIL_TAKEN: 'The specified email address is already in use.',
-        PASSWORD_NOT_MATCH: 'The confirm password should match.',
-        EMAIL_NOT_MATCH: 'The confirm email should match.'
-      },
-      last: null
-    };
+      this.loading = false;
+      this.data = {
+        email: null,
+        confirmEmail: null,
+        password: null,
+        confirmPassword: null
+      };
+      this.error = {
+        show: null,
+        message: {
+          EMAIL_TAKEN: 'The specified email address is already in use.',
+          PASSWORD_NOT_MATCH: 'The confirm password should match.',
+          EMAIL_NOT_MATCH: 'The confirm email should match.'
+        },
+        last: null
+      };
+    }
 
-    vm.register = register;
-
-    ////////////////
-
-    function register() {
-      if (vm.data.email !== vm.data.confirmEmail) {
-        vm.error.show = 'EMAIL_NOT_MATCH';
-
-      } else if (vm.data.password !== vm.data.confirmPassword) {
-        vm.error.show = 'PASSWORD_NOT_MATCH';
-
-      } else if (!vm.loading) {
-        vm.loading = true;
-        LoadingService.start();
-        AuthService.createUser(vm.data)
+    register() {
+      if (this.data.email !== this.data.confirmEmail) {
+        this.error.show = 'EMAIL_NOT_MATCH';
+      } else if (this.data.password !== this.data.confirmPassword) {
+        this.error.show = 'PASSWORD_NOT_MATCH';
+      } else if (!this.loading) {
+        this.loading = true;
+        this.LoadingService.start();
+        this.AuthService.createUser(this.data)
           .then(() => {
-            $state.go('app.home');
+            this.$state.go('app.home');
           })
           .catch((error) => {
-            console.log(error.code, error);
-            if (!vm.error.message[error.code]) {
-              vm.error.show = 'LAST';
-              vm.error.message.last = error;
+            if (!this.error.message[error.code]) {
+              this.error.show = 'LAST';
+              this.error.message.last = error;
             } else {
-              vm.error.show = error.code;
+              this.error.show = error.code;
             }
 
-            LoadingService.stop();
-            vm.loading = false;
+            this.LoadingService.stop();
+            this.loading = false;
           });
       }
     }
   }
+
+  angular
+    .module('botmon')
+    .component('register', {
+      controller: RegisterController,
+      templateUrl: 'register/register.html'
+    });
 
 })();

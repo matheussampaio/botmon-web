@@ -1,16 +1,17 @@
 (function () {
 
+  class LoadingController {
+    /* @ngInject */
+    constructor(LoadingService) {
+      this.LoadingService = LoadingService;
+    }
+  }
+
   angular
-    .module('fmsc')
+    .module('botmon')
     .component('loading', {
-      controller: loadingController,
+      controller: LoadingController,
       templateUrl: 'loading/loading.html'
     });
-
-  function loadingController(LoadingService) {
-    const vm = this;
-
-    vm.LoadingService = LoadingService;
-  }
 
 })();

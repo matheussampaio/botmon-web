@@ -1,10 +1,10 @@
 (function () {
 
-  angular.module('fmsc')
-    .run(fmscRun)
-    .config(fmscConfig);
+  angular.module('botmon')
+    .run(botmonRun)
+    .config(botmonConfig);
 
-  function fmscRun($state, $rootScope, AuthService) {
+  function botmonRun($state, $rootScope, AuthService) {
     $rootScope.$on('$stateChangeStart', (event, toState) => {
 
       const isAuthenticated = AuthService.isAuthenticated();
@@ -14,7 +14,7 @@
       if (isAuthenticated) {
         if (isPublicOnlyAction) {
           event.preventDefault();
-          $state.go('app.home');
+          $state.go('app.dashboard');
         }
       } else {
         if (isPrivateAction) {
@@ -25,19 +25,46 @@
     });
   }
 
-  function fmscConfig($stateProvider, $urlRouterProvider) {
+  function botmonConfig($stateProvider, $urlRouterProvider) {
     const appState = {
-      url: '/',
+      url: '',
       template: '<app></app>'
     };
 
     const homeState = {
-      url: 'home',
-      template: '<home></home>'
+      url: '/home',
+      template: '<home></home>',
+      data: {
+        publicOnly: true
+      }
     };
 
+    const dashboardState = {
+      url: '/dashboard',
+      template: '<dashboard></dashboard>',
+      data: {
+        private: true
+      }
+    };
+
+    const createState = {
+      url: '/create',
+      template: '<create-bot></create-bot>',
+      data: {
+        private: true
+      }
+    };
+
+    const botViewState = {
+      url: '/bot/:id',
+      template: '<bot-view></bot-view>',
+      data: {
+        private: true
+      }
+    }
+
     const profileState = {
-      url: 'profile',
+      url: '/profile',
       template: '<profile></profile>',
       data: {
         private: true
@@ -45,7 +72,7 @@
     };
 
     const loginState = {
-      url: 'login',
+      url: '/login',
       template: '<login></login>',
       data: {
         publicOnly: true
@@ -56,40 +83,43 @@
     };
 
     const registerState = {
-      url: 'register',
+      url: '/register',
+      template: '<register></register>',
       data: {
         publicOnly: true
-      },
-      template: '<register></register>'
+      }
     };
 
     const resetPasswordState = {
-      url: 'reset',
+      url: '/reset',
+      template: '<reset-password></reset-password>',
       data: {
         publicOnly: true
-      },
-      template: '<reset-password></reset-password>'
+      }
     };
 
     const changePasswordState = {
-      url: 'change',
+      url: '/change',
+      template: '<change-password></change-password>',
       data: {
         private: true
-      },
-      template: '<change-password></change-password>'
+      }
     };
 
     $stateProvider
       .state('app', appState)
         .state('app.change', changePasswordState)
         .state('app.home', homeState)
+        .state('app.dashboard', dashboardState)
+          .state('app.dashboard.create', createState)
+          .state('app.dashboard.bot', botViewState)
         .state('app.login', loginState)
         .state('app.profile', profileState)
         .state('app.register', registerState)
         .state('app.reset', resetPasswordState);
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/home');
+    $urlRouterProvider.otherwise('/dashboard');
   }
 
 })();

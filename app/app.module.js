@@ -1,12 +1,11 @@
 (function () {
 
-  angular.module('fmsc', [
+  angular.module('botmon', [
     'ngMessages',
     'ngMaterial',
+    'ngSanitize',
     'ui.router',
     'firebase',
-    'datamaps',
-    '720kb.socialshare',
     'Lodash'
   ]);
 

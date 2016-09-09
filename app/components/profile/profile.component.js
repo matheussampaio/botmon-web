@@ -1,66 +1,62 @@
 (function () {
 
-  angular
-    .module('fmsc')
-    .component('profile', {
-      controller: profileController,
-      templateUrl: 'profile/profile.html',
-      bindings: {
-        user: '<'
-      }
-    });
+  class ProfileController {
+    /* @ngInject */
+    constructor(_, LoadingService, AuthService) {
+      this._ = _;
+      this.LoadingService = LoadingService;
+      this.AuthService = AuthService;
 
-  function profileController(_, LoadingService, AuthService) {
-    const vm = this;
+      this.data = null;
+      this.updating = false;
+    }
 
-    vm.data = null;
-    vm.updating = false;
-
-    vm.LoadingService = LoadingService;
-    vm.update = update;
-    vm.cancel = cancel;
-    vm.save = save;
-
-    vm.$onInit = $onInit;
-
-    ///////////////
-
-    function $onInit() {
-      LoadingService.start();
-      AuthService.getUser().then((user) => {
-        console.log(user);
-        LoadingService.stop();
-        vm.data = {
+    $onInit() {
+      this.LoadingService.start();
+      this.AuthService.getUser().then(user => {
+        this.LoadingService.stop();
+        this.data = {
           name: user.name,
           state: user.state
         };
       });
     }
 
-    function update() {
-      if (vm.data.name !== AuthService.user.name) {
-        vm.updating = true;
+    update() {
+      if (this.data.name !== this.AuthService.user.name) {
+        this.updating = true;
       } else {
-        vm.updating = false;
+        this.updating = false;
       }
     }
 
-    function cancel() {
-      vm.data.name = AuthService.user.name;
-      vm.data.state = AuthService.user.state;
-      vm.updating = false;
+    cancel() {
+      this.data.name = this.AuthService.user.name;
+      this.data.state = this.AuthService.user.state;
+      this.updating = false;
     }
 
-    function save() {
-      vm.updating = false;
+    save() {
+      this.updating = false;
 
-      LoadingService.start();
+      this.LoadingService.start();
 
-      AuthService.update(vm.data).then(() => {
-        LoadingService.stop();
-        vm.updating = false;
+      this.AuthService.update(this.data).then(() => {
+        this.LoadingService.stop();
+        this.updating = false;
       });
     }
   }
+
+
+  angular
+    .module('botmon')
+    .component('profile', {
+      controller: ProfileController,
+      templateUrl: 'profile/profile.html',
+      bindings: {
+        user: '<'
+      }
+    });
 
 })();

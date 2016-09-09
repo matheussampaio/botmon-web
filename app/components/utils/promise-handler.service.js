@@ -49,7 +49,7 @@
   }
 
   angular
-    .module('fmsc')
+    .module('botmon')
     .factory('PromiseHandler', PromiseHandlerFactory);
 
   function PromiseHandlerFactory($q) {

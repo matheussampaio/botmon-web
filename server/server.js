@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(methodOverride());
 
-if (!process.env.FMSC_RELEASE) {
+if (!process.env.BOTMON_RELEASE) {
   app.use(errorHandler());
 }
 

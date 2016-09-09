@@ -1,50 +1,53 @@
 (function () {
 
-  angular
-    .module('fmsc')
-    .component('login', {
-      controller: loginController,
-      templateUrl: 'login/login.html'
-    });
+  class LoginController {
+    /* @ngInject */
+    constructor($state, $log, AuthService, LoadingService) {
+      this.$state = $state;
+      this.$log = $log;
 
-  function loginController($state, $log, AuthService, LoadingService) {
-    const vm = this;
+      this.AuthService = AuthService;
+      this.LoadingService = LoadingService;
 
-    vm.loading = false;
-    vm.data = {
-      email: null,
-      password: null,
-      remember: true
-    };
+      this.loading = false;
+      this.data = {
+        email: null,
+        password: null,
+        remember: true
+      };
 
-    vm.error = {
-      show: null,
-      message: {
-        INVALID_EMAIL: 'Email or password invalid.',
-        INVALID_PASSWORD: 'Email or password invalid.'
-      }
-    };
+      this.error = {
+        show: null,
+        message: {
+          INVALID_EMAIL: 'Email or password invalid.',
+          INVALID_PASSWORD: 'Email or password invalid.'
+        }
+      };
+    }
 
-    vm.login = login;
+    login() {
+      if (!this.loading) {
+        this.LoadingService.start();
+        this.loading = true;
 
-    ////////////////
-
-    function login() {
-      if (!vm.loading) {
-        LoadingService.start();
-        vm.loading = true;
-
-        AuthService.login(vm.data)
-          .then((authData) => {
-            LoadingService.stop();
-            $state.go($state.params.from);
-          }).catch((error) => {
-            vm.error.show = error.code;
-            LoadingService.stop();
-            vm.loading = false;
+        this.AuthService.login(this.data)
+          .then(authData => {
+            this.LoadingService.stop();
+            this.$state.go(this.$state.params.from);
+          }).catch(error => {
+            this.error.show = error.code;
+            this.LoadingService.stop();
+            this.loading = false;
           });
       }
     }
   }
+
+  angular
+    .module('botmon')
+    .component('login', {
+      controller: LoginController,
+      templateUrl: 'login/login.html'
+    });
 
 })();

@@ -1,25 +1,25 @@
 (function () {
 
-  angular
-    .module('fmsc')
-    .component('toolbar', {
-      controller: toolbarController,
-      templateUrl: 'toolbar/toolbar.html'
-    });
+  class ToolbarController {
+    /* @ngInject */
+    constructor($state, $log, AuthService) {
+      this.$state = $state;
 
-  function toolbarController($state, $log, AuthService) {
-    const vm = this;
+      this.AuthService = AuthService;
 
-    vm.auth = AuthService;
-    vm.logout = logout;
-    vm.isOpen = false;
+      this.isOpen = false;
+    }
 
-    ////////////////
-
-    function logout() {
-      AuthService.logout();
-      $state.go('app.home');
+    logout() {
+      this.AuthService.logout();
+      this.$state.go('app.home');
     }
   }
+  angular
+    .module('botmon')
+    .component('toolbar', {
+      controller: ToolbarController,
+      templateUrl: 'toolbar/toolbar.html'
+    });
 
 })();

@@ -1,14 +1,21 @@
 (function () {
 
+  class HomeController {
+    /* @ngInject */
+    constructor(LoadingService) {
+      this.LoadingService = LoadingService;
+    }
+
+    $onInit() {
+      this.LoadingService.stop();
+    }
+  }
+
   angular
-    .module('fmsc')
+    .module('botmon')
     .component('home', {
-      controller: homeController,
+      controller: HomeController,
       templateUrl: 'home/home.html'
     });
-
-  function homeController(LoadingService) {
-    LoadingService.stop();
-  }
 
 })();

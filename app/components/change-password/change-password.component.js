@@ -1,56 +1,60 @@
 (function () {
 
+  class ChangePasswordController {
+    /* @ngInject */
+    constructor(_, UtilsService, LoadingService, AuthService) {
+      this._ = _;
+
+      this.AuthService = AuthService;
+      this.UtilsService = UtilsService;
+      this.LoadingService = LoadingService;
+
+      this.data = null;
+      this.error = false;
+      this.success = false;
+      this.userLoaded = false;
+      this.passwordMatch = false;
+    }
+
+    $onInit() {
+      this.LoadingService.start();
+      this.AuthService.getUser().then(() => {
+        this.LoadingService.stop();
+        this.userLoaded = true;
+      });
+    }
+
+    refresh() {
+      if (this.data.newPassword === this.data.newConfirmPassword) {
+        this.passwordMatch = true;
+      } else {
+        this.passwordMatch = false;
+      }
+    }
+
+    changePassword() {
+      this.LoadingService.start();
+
+      this.AuthService.changePassword(this.data)
+        .then(() => {
+          this.success = true;
+        })
+        .catch(() => {
+          this.error = true;
+        })
+        .then(() => {
+          this.LoadingService.stop();
+        });
+    }
+  }
   angular
-    .module('fmsc')
+    .module('botmon')
     .component('changePassword', {
-      controller: changePasswordController,
+      controller: ChangePasswordController,
       templateUrl: 'change-password/change-password.html',
       bindings: {
         user: '<'
       }
     });
-
-  function changePasswordController(_, UtilsService, LoadingService, AuthService) {
-    const vm = this;
-
-    vm.data = null;
-    vm.refresh = refresh;
-    vm.changePassword = changePassword;
-    vm.LoadingService = LoadingService;
-
-    vm.$onInit = $onInit;
-    ///////////////
-
-    function $onInit() {
-      LoadingService.start();
-      AuthService.getUser().then(() => {
-        LoadingService.stop();
-        vm.userLoaded = true;
-      });
-    }
-
-    function refresh() {
-      if (vm.data.newPassword === vm.data.newConfirmPassword) {
-        vm.passwordMatch = true;
-      } else {
-        vm.passwordMatch = false;
-      }
-    }
-
-    function changePassword() {
-      LoadingService.start();
-
-      AuthService.changePassword(vm.data)
-        .then(() => {
-          vm.success = true;
-        })
-        .catch(() => {
-          vm.error = true;
-        })
-        .then(() => {
-          LoadingService.stop();
-        });
-    }
-  }
 
 })();

@@ -1,43 +1,43 @@
 (function () {
 
-  angular
-    .module('fmsc')
-    .component('resetPassword', {
-      controller: resetPasswordController,
-      templateUrl: 'reset-password/reset-password.html'
-    });
+  class ResetPasswordController {
+    /* @ngInject */
+    constructor(AuthService, LoadingService) {
+      this.AuthService = AuthService;
+      this.LoadingService = LoadingService;
 
-  function resetPasswordController(AuthService, LoadingService) {
-    const vm = this;
+      this.loading = false;
+      this.data = {
+        email: null
+      };
 
-    vm.loading = false;
-    vm.data = {
-      email: null
-    };
+    }
 
-    vm.reset = reset;
+    reset() {
+      if (!this.loading) {
+        this.LoadingService.start();
+        this.loading = true;
 
-    ////////////////
-
-    function reset() {
-      if (!vm.loading) {
-        LoadingService.start();
-        vm.loading = true;
-
-        console.log('reseting', vm.data);
-        AuthService.resetPassword(vm.data)
+        this.AuthService.resetPassword(this.data)
           .then(() => {
-            vm.success = true;
+            this.success = true;
           }).catch(() => {
             // we omit reset fails...
           })
           .then(() => {
-            vm.success = true;
-            vm.loading = false;
-            LoadingService.stop();
+            this.success = true;
+            this.loading = false;
+            this.LoadingService.stop();
           });
       }
     }
   }
+
+  angular
+    .module('botmon')
+    .component('resetPassword', {
+      controller: ResetPasswordController,
+      templateUrl: 'reset-password/reset-password.html'
+    });
 
 })();

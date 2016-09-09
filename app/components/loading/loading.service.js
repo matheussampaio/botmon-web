@@ -1,7 +1,7 @@
 (function () {
 
   angular
-    .module('fmsc')
+    .module('botmon')
     .service('LoadingService', LoadingService);
 
   function LoadingService() {

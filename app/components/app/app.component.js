@@ -1,13 +1,9 @@
 (function () {
 
   angular
-    .module('fmsc')
+    .module('botmon')
     .component('app', {
-      controller: AppController,
       templateUrl: 'app/app.html'
     });
-
-  function AppController() {
-  }
 
 })();

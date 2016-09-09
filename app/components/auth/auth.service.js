@@ -1,7 +1,7 @@
 (function () {
 
   angular
-    .module('fmsc')
+    .module('botmon')
     .service('AuthService', AuthService);
 
   function AuthService($q, $log, $firebaseAuth, $firebaseObject, FirebaseRef) {
@@ -32,17 +32,14 @@
 
     function loadUser(firebaseUser) {
       // TODO: use param to get user instead
-
       const auth = _auth.$getAuth();
-      console.log('loadUser...');
-      console.log(auth);
 
       if (auth === null) {
         service.user = null;
         return $q.reject();
       }
 
-      service.user = $firebaseObject(FirebaseRef.database.child(`users/${auth.uid}`));
+      service.user = $firebaseObject(FirebaseRef.database.ref(`users/${auth.uid}`));
       return service.user.$loaded();
     }
 
@@ -79,7 +76,7 @@
         password
       )
       .then((user) => {
-        return FirebaseRef.database.child('users').child(user.uid).set({
+        return FirebaseRef.database.ref(`users/${user.uid}`).set({
           name,
           uid: user.uid,
           email

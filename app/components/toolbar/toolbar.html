@@ -4,15 +4,20 @@
     <div flex layout="row" layout-align="start center">
       <div>BOTMON</div>
 
-      <md-button ui-sref-active="active" ui-sref="app.home">Home</md-button>
+      <md-button ui-sref-active="active" ui-sref="app.home" ng-if="!$ctrl.AuthService.user">
+          Home
+      </md-button>
+      <md-button ui-sref-active="active" ui-sref="app.dashboard" ng-if="$ctrl.AuthService.user">
+          Dashboard
+      </md-button>
     </div>
 
     <!-- Right Side -->
     <div flex layout layout-align="end center">
-      <md-button ui-sref-active="active" ui-sref="app.login" ng-if="!$ctrl.auth.user">Login</md-button>
-      <md-button ui-sref-active="active" ui-sref="app.register" ng-if="!$ctrl.auth.user">Register</md-button>
+      <md-button ui-sref-active="active" ui-sref="app.login" ng-if="!$ctrl.AuthService.user">Login</md-button>
+      <md-button ui-sref-active="active" ui-sref="app.register" ng-if="!$ctrl.AuthService.user">Register</md-button>
 
-      <md-fab-speed-dial ng-if="$ctrl.auth.user" md-open="$ctrl.isOpen" ng-mouseenter="$ctrl.isOpen = true"
+      <md-fab-speed-dial ng-if="$ctrl.AuthService.user" md-open="$ctrl.isOpen" ng-mouseenter="$ctrl.isOpen = true"
         ng-mouseleave="$ctrl.isOpen = false" md-direction="left" class="md-scale">
         <md-fab-trigger>
           <md-button aria-label="Settings" class="md-fab md-raised md-mini">

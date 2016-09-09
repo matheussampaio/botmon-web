@@ -10,7 +10,7 @@ const plugins = require('gulp-load-plugins')({
 });
 
 const argv = yargs
-  .env('fmsc')
+  .env('botmon')
   .option('release', {
     description: 'Build a release version',
     type: 'boolean'
@@ -18,7 +18,7 @@ const argv = yargs
   .argv;
 
 const config = {
-  appName: 'fmsc'
+  appName: 'botmon'
 };
 
 const browserSync = require('browser-sync').create(config.appName);

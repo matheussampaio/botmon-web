@@ -1,7 +1,7 @@
 (function () {
 
   angular
-    .module('fmsc')
+    .module('botmon')
     .service('FirebaseRef', FirebaseRef);
 
   function FirebaseRef($window, $firebaseAuth, FirebaseConfig) {
@@ -18,7 +18,7 @@
     firebase.initializeApp(config);
 
     const service = {
-      database: firebase.database().ref(),
+      database: firebase.database(),
       auth: $firebaseAuth()
     };
 
